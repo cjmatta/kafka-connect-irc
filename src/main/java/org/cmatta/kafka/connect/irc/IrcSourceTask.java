@@ -7,7 +7,6 @@ import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.cmatta.kafka.connect.irc.util.IrcMessageCreator;
 import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.NickAlreadyInUseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,20 +27,27 @@ public class IrcSourceTask extends SourceTask {
 
   @Override
   public void start(Map<String, String> props) {
-    //TODO: Do things here that are required to start your task. This could be open a connection to a database, etc.
     try {
       config = new IrcSourceTaskConfig(props);
       ircBot.connect(config.getIrcServer(), config.getIrcServerPort());
+      if(log.isInfoEnabled()) {
+        log.info("Connecting to server: {}", config.getIrcServer());
+      }
+
       for (String channel : config.getIrcChannels()) {
+        if(log.isInfoEnabled()) {
+          log.info("Joining channel: {}", channel);
+        }
+
         ircBot.joinChannel(channel);
       }
     } catch (ConfigException e) {
       throw new ConfigException("IrcSourceTask couldn't start due to configuration exception: ", e);
-    } catch (NickAlreadyInUseException e) {
-      e.printStackTrace();
     } catch (IOException e) {
+      log.error(e.getMessage());
       e.printStackTrace();
     } catch (IrcException e) {
+      log.error(e.getMessage());
       e.printStackTrace();
     }
   }

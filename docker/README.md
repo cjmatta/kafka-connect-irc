@@ -7,4 +7,6 @@ $ docker-compose up
 
 ##### Submit the test config
 This will submit a connector that listens to the English language changes channel on irc.wikimedia.org
-
+```
+$ ./submit_wikipedia_config.sh
+```
