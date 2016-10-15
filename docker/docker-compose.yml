@@ -29,6 +29,9 @@ services:
     restart: on-failure:3
     volumes:
       - ../target/kafka-connect-irc-1.0-SNAPSHOT-package/share/java/kafka-connect-irc:/usr/share/java/kafka-connect-irc
+      - ../target/kafka-connect-irc-1.0-SNAPSHOT-package/etc/kafka-connect-irc:/etc/kafka-connect-irc
+    ports:
+      - "8083:8083"
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_REST_PORT: 8083
@@ -40,5 +43,7 @@ services:
       CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
       CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
       CONNECT_ZOOKEEPER_CONNECT: zookeeper:2181
