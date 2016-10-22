@@ -8,6 +8,8 @@ import org.jibble.pircbot.PircBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.Date;
 
@@ -25,6 +27,11 @@ public class IrcBot extends PircBot {
     RandomStringGenerator rand = new RandomStringGenerator();
     String name = "KafkaConnectBot_" + rand.random(6);
     this.setName(name);
+    try {
+      this.setEncoding("UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
   }
 
 
