@@ -35,10 +35,10 @@ services:
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_REST_PORT: 8083
-      CONNECT_GROUP_ID: "default"
-      CONNECT_CONFIG_STORAGE_TOPIC: "default.config"
-      CONNECT_OFFSET_STORAGE_TOPIC: "default.offsets"
-      CONNECT_STATUS_STORAGE_TOPIC: "default.status"
+      CONNECT_GROUP_ID: "cmattaconnect"
+      CONNECT_CONFIG_STORAGE_TOPIC: "cmattaconnect.config"
+      CONNECT_OFFSET_STORAGE_TOPIC: "cmattaconnect.offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "cmattaconnect.status"
       CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
