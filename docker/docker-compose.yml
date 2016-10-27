@@ -13,15 +13,15 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
   control_center:
-    image: confluentinc/cp-enterprise-control-center
+    image: confluentinc/cp-control-center
     depends_on:
       - zookeeper
       - kafka
     ports:
       - "9021:9021"
     environment:
-      CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka:9092"
-      CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      BOOTSTRAP_SERVERS: "kafka:9092"
+      ZOOKEEPER_CONNECT: "zookeeper:2181"
       CONTROL_CENTER_REPLICATION_FACTOR: 1
       CONTROL_CENTER_CONNECT_CLUSTER: connect:8083
   schema-registry:
