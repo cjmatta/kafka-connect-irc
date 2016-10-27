@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker exec docker_kafka_1 kafka-console-consumer --bootstrap-server kafka:9092 --topic wikipedia --from-beginning --new-consumer
+docker exec docker_connect_1 kafka-avro-console-consumer --property schema.registry.url=http://schema-registry:8081 --bootstrap-server kafka:9092 --topic wikipedia --from-beginning --new-consumer
