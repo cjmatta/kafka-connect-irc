@@ -9,7 +9,7 @@ public class RandomStringGenerator {
   static final String ABC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   static final SecureRandom rand = new SecureRandom();
 
-  public String random(int length) {
+  public static String random(int length) {
     StringBuilder sb = new StringBuilder(length);
 
     for (int i = 0; i < length; i++) {

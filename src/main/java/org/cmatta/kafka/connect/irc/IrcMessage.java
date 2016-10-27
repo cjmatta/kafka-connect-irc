@@ -1,4 +1,4 @@
-package org.cmatta.kafka.connect.irc.util;
+package org.cmatta.kafka.connect.irc;
 
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
@@ -12,10 +12,10 @@ import java.util.Date;
  * Created by chris on 10/14/16.
  */
 public class IrcMessage extends Struct {
-  final private static String CREATED_AT = "createdat";
-  final private static String CHANNEL = "channel";
-  final private static String SENDER = "sender";
-  final private static String MESSAGE = "message";
+  private static final String CREATED_AT = "createdat";
+  private static final String CHANNEL = "channel";
+  private static final String SENDER = "sender";
+  private static final String MESSAGE = "message";
 
   final public static Schema SCHEMA = SchemaBuilder.struct()
         .name("org.cmatta.kafka.connect.irc.message")
@@ -25,7 +25,7 @@ public class IrcMessage extends Struct {
         .field(SENDER, IrcUser.SCHEMA)
         .field(MESSAGE, SchemaBuilder.string().doc("The actual message sent to the channel.").required().build());
 
-  public IrcMessage(Long createdAt, String channel, IrcUser user, String message, Struct struct) {
+  public IrcMessage(Date createdAt, String channel, IrcUser user, String message) {
     super(SCHEMA);
     this
         .put(CREATED_AT, createdAt)

@@ -1,4 +1,4 @@
-package org.cmatta.kafka.connect.irc.util;
+package org.cmatta.kafka.connect.irc;
 
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
@@ -8,9 +8,9 @@ import org.apache.kafka.connect.data.Struct;
  * Created by chris on 10/22/16.
  */
 public class IrcUser extends Struct {
-  final private static String NICK = "nick";
-  final private static String LOGIN = "login";
-  final private static String HOSTNAME = "hostname";
+  private static final String NICK = "nick";
+  private static final String LOGIN = "login";
+  private static final String HOSTNAME = "hostname";
 
   final public static Schema SCHEMA = SchemaBuilder.struct()
       .name("org.cmatta.kafka.connect.irc.user")

@@ -7,14 +7,40 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>kafka-connect-irc</name>
 
     <properties>
-        <kafka.version>0.10.0.0-cp1</kafka.version>
+        <kafka.version>0.10.1.0-SNAPSHOT</kafka.version>
         <junit.version>4.12</junit.version>
         <avro.version>1.7.7</avro.version>
+        <confluent.version>3.1.0-SNAPSHOT</confluent.version>
     </properties>
 
+    <name>kafka-connect-irc</name>
+
+    <url>https://github.com/cjmatta/kafka-connect-irc</url>
+
+    <description>
+        A Kafka Connect connector for collecting messages from IRC.
+    </description>
+
+    <inceptionYear>2016</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>cmatta</id>
+            <name>Chris Matta</name>
+            <email>cmatta@gmail.com</email>
+            <timezone>America/New_York</timezone>
+        </developer>
+    </developers>
     <dependencies>
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -34,19 +60,44 @@
             <version>19.0</version>
         </dependency>
         <dependency>
-            <groupId>pircbot</groupId>
-            <artifactId>pircbot</artifactId>
-            <version>1.5.0</version>
-        </dependency>
-        <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>monitoring-interceptors</artifactId>
-            <version>3.0.0</version>
+            <version>${confluent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.schwering</groupId>
+            <artifactId>irclib</artifactId>
+            <version>1.10</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+                    <properties>
+                        <owner>Chris Matta</owner>
+                        <email>cmatta@gmail.com</email>
+                    </properties>
+                    <excludes>
+                        <exclude>**/README**</exclude>
+                        <exclude>src/test/resources/**</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                        <exclude>src/assembly/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -87,6 +138,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
         <resources>
             <resource>

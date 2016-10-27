@@ -13,17 +13,27 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
   control_center:
-    image: confluentinc/cp-control-center
+    image: confluentinc/cp-enterprise-control-center
     depends_on:
       - zookeeper
       - kafka
     ports:
       - "9021:9021"
     environment:
-      BOOTSTRAP_SERVERS: "kafka:9092"
-      ZOOKEEPER_CONNECT: "zookeeper:2181"
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka:9092"
+      CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181"
       CONTROL_CENTER_REPLICATION_FACTOR: 1
       CONTROL_CENTER_CONNECT_CLUSTER: connect:8083
+  schema-registry:
+    image: confluentinc/cp-schema-registry:latest
+    depends_on:
+      - zookeeper
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+    ports:
+    - 8081:8081
   connect:
     image: confluentinc/cp-kafka-connect:latest
     restart: on-failure:3
@@ -39,11 +49,13 @@ services:
       CONNECT_CONFIG_STORAGE_TOPIC: "cmattaconnect.config"
       CONNECT_OFFSET_STORAGE_TOPIC: "cmattaconnect.offsets"
       CONNECT_STATUS_STORAGE_TOPIC: "cmattaconnect.status"
-      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_KEY_CONVERTER: "io.confluent.connect.avro.AvroConverter"
+      CONNECT_VALUE_CONVERTER: "io.confluent.connect.avro.AvroConverter"
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
       CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
       CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
-      CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "connect"
       CONNECT_ZOOKEEPER_CONNECT: zookeeper:2181
