@@ -4,8 +4,7 @@ services:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: "2181"
-      ZOOKEEPER_TICK_TIME: "2000"
-  kafka:
+      ZOOKEEPER_TICK_TIME: "2000" kafka:
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
@@ -45,10 +44,10 @@ services:
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_REST_PORT: 8083
-      CONNECT_GROUP_ID: "cmattaconnect"
-      CONNECT_CONFIG_STORAGE_TOPIC: "cmattaconnect.config"
-      CONNECT_OFFSET_STORAGE_TOPIC: "cmattaconnect.offsets"
-      CONNECT_STATUS_STORAGE_TOPIC: "cmattaconnect.status"
+      CONNECT_GROUP_ID: "default"
+      CONNECT_CONFIG_STORAGE_TOPIC: "default.config"
+      CONNECT_OFFSET_STORAGE_TOPIC: "default.offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "default.status"
       CONNECT_KEY_CONVERTER: "io.confluent.connect.avro.AvroConverter"
       CONNECT_VALUE_CONVERTER: "io.confluent.connect.avro.AvroConverter"
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
