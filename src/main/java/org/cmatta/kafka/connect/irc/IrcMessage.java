@@ -18,7 +18,7 @@ public class IrcMessage extends Struct {
   private static final String MESSAGE = "message";
 
   final public static Schema SCHEMA = SchemaBuilder.struct()
-        .name("org.cmatta.kafka.connect.irc.message")
+        .name("org.cmatta.kafka.connect.irc.Message")
         .doc("Basic IRC message.")
         .field(CREATED_AT, Timestamp.builder().doc("When this message was received.").required().build())
         .field(CHANNEL, SchemaBuilder.string().doc("The channel to which the message was sent.").required().build())
