@@ -13,7 +13,7 @@ public class IrcUser extends Struct {
   private static final String HOSTNAME = "hostname";
 
   final public static Schema SCHEMA = SchemaBuilder.struct()
-      .name("org.cmatta.kafka.connect.irc.user")
+      .name("org.cmatta.kafka.connect.irc.User")
       .field(NICK, SchemaBuilder.string().doc("The nick of the person who sent the message.").required().build())
       .field("login", SchemaBuilder.string().doc("The login of the person who sent the message.").required().build())
       .field("hostname", SchemaBuilder.string().doc("The hostname of the person who sent the message.").required().build());
