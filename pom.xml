@@ -9,7 +9,7 @@
 
 
     <properties>
-        <kafka.version>0.10.0.1-cp1</kafka.version>
+        <kafka.version>0.10.1.0</kafka.version>
         <junit.version>4.12</junit.version>
         <avro.version>1.7.7</avro.version>
         <confluent.version>3.0.1</confluent.version>
