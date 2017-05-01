@@ -9,13 +9,13 @@ public class KafkaBotNameGenerator {
   static final String ABC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   static final SecureRandom rand = new SecureRandom();
 
-  public static String generateBotName() {
+  public static String generateBotName(String prefix) {
     StringBuilder sb = new StringBuilder(6);
 
     for (int i = 0; i < 6; i++) {
       sb.append(ABC.charAt(rand.nextInt(ABC.length())));
     }
 
-    return "KafkaConnectBot_" + sb.toString();
+    return prefix + "_" + sb.toString();
   }
 }

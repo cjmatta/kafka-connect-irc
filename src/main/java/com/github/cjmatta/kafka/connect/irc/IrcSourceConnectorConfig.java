@@ -22,7 +22,7 @@ public class IrcSourceConnectorConfig extends AbstractConfig {
   public static final String IRC_CHANNELS_CONF = "irc.channels";
   private static final String IRC_CHANNELS_DOC = "Comma separated list of IRC channels.";
   public static final String IRC_BOT_NAME = "irc.bot.name";
-  private static final String IRC_BOT_DOC = "The name of the IRC bot in the channel, defaults to KafkaConnectBot_<6 digit alpha numeric>";
+  private static final String IRC_BOT_DOC = "The name of the IRC bot in the channel, defaults to KafkaConnectBot.";
   public static final String KAFKA_TOPIC_CONF = "kafka.topic";
   private static final String KAFKA_TOPIC_DOC = "Topic to save IRC messages to.";
 
@@ -38,7 +38,7 @@ public class IrcSourceConnectorConfig extends AbstractConfig {
     return new ConfigDef()
         .define(IRC_SERVER_CONF, Type.STRING, Importance.HIGH, IRC_SERVER_DOC)
         .define(IRC_SERVER_PORT_CONF, Type.INT, 6667, Importance.LOW, IRC_SERVER_PORT_DOC)
-        .define(IRC_BOT_NAME, Type.STRING, KafkaBotNameGenerator.generateBotName(), Importance.LOW, IRC_BOT_DOC)
+        .define(IRC_BOT_NAME, Type.STRING, KafkaBotNameGenerator.generateBotName("KafkaConnectBot"), Importance.LOW, IRC_BOT_DOC)
         .define(IRC_CHANNELS_CONF, Type.LIST, Importance.HIGH, IRC_CHANNELS_DOC)
         .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC);
   }
