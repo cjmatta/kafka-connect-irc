@@ -1,4 +1,4 @@
-package org.cmatta.kafka.connect.irc;
+package com.github.cjmatta.kafka.connect.irc;
 
 /**
  * Created by jeremy on 5/3/16.

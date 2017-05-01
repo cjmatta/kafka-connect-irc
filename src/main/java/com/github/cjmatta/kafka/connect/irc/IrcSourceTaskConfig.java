@@ -12,7 +12,7 @@
  * the License.
  **/
 
-package org.cmatta.kafka.connect.irc;
+package com.github.cjmatta.kafka.connect.irc;
 
 
 import org.apache.kafka.common.config.ConfigDef;

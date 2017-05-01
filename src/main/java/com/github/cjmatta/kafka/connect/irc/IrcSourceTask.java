@@ -1,4 +1,4 @@
-package org.cmatta.kafka.connect.irc;
+package com.github.cjmatta.kafka.connect.irc;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.kafka.common.config.ConfigException;
@@ -6,7 +6,7 @@ import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
-import org.cmatta.kafka.connect.irc.util.RandomStringGenerator;
+import com.github.cjmatta.kafka.connect.irc.util.KafkaBotNameGenerator;
 import org.schwering.irc.lib.IRCConnection;
 import org.schwering.irc.lib.IRCEventAdapter;
 import org.schwering.irc.lib.IRCUser;
@@ -30,6 +30,7 @@ public class IrcSourceTask extends SourceTask {
   private String ircServer;
   private List<String> channels;
   private int ircPort;
+  private String ircBotName;
 
   private String topic;
 
@@ -49,11 +50,11 @@ public class IrcSourceTask extends SourceTask {
       queue = new LinkedBlockingQueue<>();
       ircServer = config.getIrcServer();
       ircPort = config.getIrcServerPort();
+      ircBotName = config.getIrcBotName();
       channels = config.getIrcChannels();
       topic = config.getKafkaTopic();
 
-      String nick = "KafkaConnectBot_" + RandomStringGenerator.random(6);
-      this.connection = new IRCConnection(ircServer, new int[]{ircPort}, "", nick, nick, nick);
+      this.connection = new IRCConnection(ircServer, new int[]{ircPort}, "", ircBotName, ircBotName, ircBotName);
       this.connection.addIRCEventListener(new IrcMessageEvent());
       this.connection.setEncoding("UTF-8");
       this.connection.setPong(true);

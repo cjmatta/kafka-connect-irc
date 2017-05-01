@@ -9,10 +9,10 @@
 
 
     <properties>
-        <kafka.version>0.10.1.0</kafka.version>
+        <kafka.version>0.10.2.0</kafka.version>
         <junit.version>4.12</junit.version>
         <avro.version>1.7.7</avro.version>
-        <confluent.version>3.1.0</confluent.version>
+        <confluent.version>3.2.0</confluent.version>
     </properties>
 
     <name>kafka-connect-irc</name>
