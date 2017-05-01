@@ -10,7 +10,7 @@ public class KafkaBotNameGenerator {
   static final SecureRandom rand = new SecureRandom();
 
   public static String generateBotName() {
-    StringBuilder sb = new StringBuilder(length);
+    StringBuilder sb = new StringBuilder(6);
 
     for (int i = 0; i < 6; i++) {
       sb.append(ABC.charAt(rand.nextInt(ABC.length())));
