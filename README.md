@@ -1,4 +1,5 @@
-Kafka Connect IRC source connector
+### Kafka Connect IRC source connector
+A Kafka Connect source connector for Internet Relay Chat
 
 
 # Running in development
