@@ -2,6 +2,12 @@
 A Kafka Connect source connector for Internet Relay Chat
 
 
+#### Configuration Properties
+
+|Property|Description|
+|--------|-----------|
+|
+
 #### Running in development
 
 ```
