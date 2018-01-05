@@ -15,6 +15,7 @@
  */
 package com.github.cjmatta.kafka.connect.irc;
 
+import org.apache.kafka.common.config.types.Password;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -33,6 +34,7 @@ public class IrcSourceConnectorConfigTest {
     connProps.put(IrcSourceConnectorConfig.IRC_SERVER_CONF, "irc.wikimedia.org");
     connProps.put(IrcSourceConnectorConfig.IRC_CHANNELS_CONF, "#en.wikipedia,#es.wikipedia");
     connProps.put(IrcSourceConnectorConfig.KAFKA_TOPIC_CONF, "wikipedia");
+    connProps.put(IrcSourceConnectorConfig.IRC_PASSWORD_CONF, "p4ssw0rd");
     config = new IrcSourceConnectorConfig(connProps);
   }
 
@@ -42,6 +44,12 @@ public class IrcSourceConnectorConfigTest {
     assertEquals(channels.size(), 2);
     assertEquals(channels.get(0), "#en.wikipedia");
     assertEquals(channels.get(1), "#es.wikipedia");
+  }
+
+  @Test
+  public void testGetPassword() {
+    Password password = config.getIrcPassword();
+    assertEquals("p4ssw0rd", password.value());
   }
 
   @Test

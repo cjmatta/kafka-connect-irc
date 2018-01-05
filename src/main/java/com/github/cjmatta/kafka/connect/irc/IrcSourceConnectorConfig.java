@@ -22,6 +22,7 @@ import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigDef.Type;
 import org.apache.kafka.common.config.ConfigDef.Importance;
+import org.apache.kafka.common.config.types.Password;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +39,8 @@ public class IrcSourceConnectorConfig extends AbstractConfig {
   private static final String IRC_CHANNELS_DOC = "Comma separated list of IRC channels.";
   public static final String IRC_BOT_NAME = "irc.bot.name";
   private static final String IRC_BOT_DOC = "The name of the IRC bot in the channel, defaults to KafkaConnectBot.";
+  public static final String IRC_PASSWORD_CONF = "irc.password";
+  private static final String IRC_PASSWORD_DOC = "Password for connecting to the IRC server";
   public static final String KAFKA_TOPIC_CONF = "kafka.topic";
   private static final String KAFKA_TOPIC_DOC = "Topic to save IRC messages to.";
 
@@ -54,6 +57,7 @@ public class IrcSourceConnectorConfig extends AbstractConfig {
         .define(IRC_SERVER_CONF, Type.STRING, Importance.HIGH, IRC_SERVER_DOC)
         .define(IRC_SERVER_PORT_CONF, Type.INT, 6667, Importance.LOW, IRC_SERVER_PORT_DOC)
         .define(IRC_BOT_NAME, Type.STRING, KafkaBotNameGenerator.generateBotName("KafkaConnectBot"), Importance.LOW, IRC_BOT_DOC)
+        .define(IRC_PASSWORD_CONF, Type.PASSWORD, "", Importance.LOW, IRC_PASSWORD_DOC)
         .define(IRC_CHANNELS_CONF, Type.LIST, Importance.HIGH, IRC_CHANNELS_DOC)
         .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC);
   }
@@ -65,6 +69,8 @@ public class IrcSourceConnectorConfig extends AbstractConfig {
   public int getIrcServerPort() { return this.getInt(IRC_SERVER_PORT_CONF); }
 
   public String getIrcBotName() { return this.getString(IRC_BOT_NAME); }
+
+  public Password getIrcPassword() { return this.getPassword(IRC_PASSWORD_CONF); }
 
   public List<String> getIrcChannels() {
     return this.getList(IRC_CHANNELS_CONF);

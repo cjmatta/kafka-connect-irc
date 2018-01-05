@@ -17,21 +17,24 @@ package com.github.cjmatta.kafka.connect.irc;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.kafka.common.config.ConfigException;
+import org.apache.kafka.common.config.types.Password;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
-import com.github.cjmatta.kafka.connect.irc.util.KafkaBotNameGenerator;
 import org.schwering.irc.lib.IRCConnection;
 import org.schwering.irc.lib.IRCEventAdapter;
 import org.schwering.irc.lib.IRCUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.transform.Source;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class IrcSourceTask extends SourceTask {
   static final Logger log = LoggerFactory.getLogger(IrcSourceTask.class);
@@ -46,6 +49,9 @@ public class IrcSourceTask extends SourceTask {
   private List<String> channels;
   private int ircPort;
   private String ircBotName;
+  private Password ircPassword;
+
+  private final AtomicBoolean running = new AtomicBoolean(false);
 
   private String topic;
 
@@ -62,14 +68,15 @@ public class IrcSourceTask extends SourceTask {
   public void start(Map<String, String> props) {
     try {
       config = new IrcSourceTaskConfig(props);
-      queue = new LinkedBlockingQueue<>();
+      queue = new LinkedBlockingQueue<SourceRecord>();
       ircServer = config.getIrcServer();
       ircPort = config.getIrcServerPort();
       ircBotName = config.getIrcBotName();
+      ircPassword = config.getIrcPassword();
       channels = config.getIrcChannels();
       topic = config.getKafkaTopic();
 
-      this.connection = new IRCConnection(ircServer, new int[]{ircPort}, "", ircBotName, ircBotName, ircBotName);
+      this.connection = new IRCConnection(ircServer, new int[]{ircPort}, ircPassword.value(), ircBotName, ircBotName, ircBotName);
       this.connection.addIRCEventListener(new IrcMessageEvent());
       this.connection.setEncoding("UTF-8");
       this.connection.setPong(true);
@@ -95,6 +102,7 @@ public class IrcSourceTask extends SourceTask {
         }
 
       }
+      running.set(true);
     } catch (ConfigException e) {
       throw new ConfigException("IrcSourceTask couldn't start due to configuration exception: ", e);
     }
@@ -103,15 +111,26 @@ public class IrcSourceTask extends SourceTask {
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
     List<SourceRecord> records = new LinkedList<>();
-//    Queue will block until there are items in it.
-    if (queue.isEmpty()) records.add(queue.take());
-    queue.drainTo(records);
+
+    while(running.get()) {
+      // Poll for new records but only for a max amount of time!
+      SourceRecord record = queue.poll(1L, TimeUnit.SECONDS);
+      if (record == null) {
+        // the queue was empty, so continue looping ...
+        continue;
+      }
+      records.add(record);
+      queue.drainTo(records);
+      return records;
+    }
     return records;
   }
 
   @Override
   public void stop() {
     //TODO: Do whatever is required to stop your task.
+    running.set(false);
+
     for(String channel: this.channels){
       this.connection.doPart(channel);
     }
