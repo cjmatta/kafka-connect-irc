@@ -21,7 +21,7 @@
 
     <groupId>io.confluent.kafka.connect</groupId>
     <artifactId>kafka-connect-irc</artifactId>
-    <version>3.3.0</version>
+    <version>4.0.0</version>
     <packaging>jar</packaging>
 
 
