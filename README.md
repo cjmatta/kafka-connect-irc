@@ -4,9 +4,14 @@ A Kafka Connect source connector for Internet Relay Chat
 
 #### Configuration Properties
 
-|Property|Description|
-|--------|-----------|
-|
+| Property | Description |
+| -------- | ----------- |
+| irc.server | The IRC Server to connect to. |
+| irc.server.port | The port of the IRC server to connect to. If not included defaults to 6697 |
+| irc.channels | Comma separated list of IRC channels. |
+| irc.bot.name | The name of the IRC bot in the channel, defaults to KafkaConnectBot. | 
+| irc.password | Password for connecting to the IRC server |
+
 
 #### Running in development
 
