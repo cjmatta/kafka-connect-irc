@@ -102,6 +102,7 @@ public class IrcSourceTask extends SourceTask {
         }
 
       }
+      log.debug("Set running state to true");
       running.set(true);
     } catch (ConfigException e) {
       throw new ConfigException("IrcSourceTask couldn't start due to configuration exception: ", e);
@@ -117,10 +118,13 @@ public class IrcSourceTask extends SourceTask {
       SourceRecord record = queue.poll(1L, TimeUnit.SECONDS);
       if (record == null) {
         // the queue was empty, so continue looping ...
+        log.debug("Empty queue, looping...");
         continue;
       }
+
       records.add(record);
       queue.drainTo(records);
+      log.debug("Returning " + records.size() + " records.");
       return records;
     }
     return records;
@@ -129,13 +133,16 @@ public class IrcSourceTask extends SourceTask {
   @Override
   public void stop() {
     //TODO: Do whatever is required to stop your task.
+    log.debug("Set running state to false.");
     running.set(false);
 
     for(String channel: this.channels){
+      log.debug("Leaving channel: " + channel);
       this.connection.doPart(channel);
     }
-
+    log.debug("Shutting down IRC connection to server...");
     this.connection.interrupt();
+    log.debug("IRC server disconnect complete.");
 
     try {
       this.connection.join();
