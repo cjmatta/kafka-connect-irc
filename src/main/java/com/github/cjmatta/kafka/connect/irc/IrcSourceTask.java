@@ -76,32 +76,14 @@ public class IrcSourceTask extends SourceTask {
       channels = config.getIrcChannels();
       topic = config.getKafkaTopic();
 
-      this.connection = new IRCConnection(ircServer, new int[]{ircPort}, ircPassword.value(), ircBotName, ircBotName, ircBotName);
-      this.connection.addIRCEventListener(new IrcMessageEvent());
-      this.connection.setEncoding("UTF-8");
-      this.connection.setPong(true);
-      this.connection.setColors(false);
+      connection = new IRCConnection(ircServer, new int[]{ircPort}, ircPassword.value(), ircBotName, ircBotName, ircBotName);
+      connection.addIRCEventListener(new IrcMessageEvent());
+      connection.setEncoding("UTF-8");
+      connection.setPong(true);
+      connection.setColors(false);
 
-      if(log.isInfoEnabled()) {
-        log.info("Connecting to server: {}", config.getIrcServer());
-      }
-      try {
-        this.connection.connect();
-      } catch (IOException e) {
-        throw new ConnectException("Unable to connect to server: " + this.ircServer);
-      }
+      connectAndJoin();
 
-      for (String channel : config.getIrcChannels()) {
-        if(log.isInfoEnabled()) {
-          log.info("Joining channel: {}", channel);
-        }
-        try {
-          this.connection.doJoin(channel);
-        } catch (Exception e) {
-          throw new ConnectException("Problem joining channel " + channel);
-        }
-
-      }
       log.debug("Set running state to true");
       running.set(true);
     } catch (ConfigException e) {
@@ -114,6 +96,11 @@ public class IrcSourceTask extends SourceTask {
     List<SourceRecord> records = new LinkedList<>();
 
     while(running.get()) {
+//      Check to see if the IRC connection has disconnected
+      if (!connection.isConnected()) {
+        connectAndJoin();
+      }
+
       // Poll for new records but only for a max amount of time!
       SourceRecord record = queue.poll(1L, TimeUnit.SECONDS);
       if (record == null) {
@@ -127,22 +114,24 @@ public class IrcSourceTask extends SourceTask {
       log.debug("Returning " + records.size() + " records.");
       return records;
     }
+
     return records;
   }
 
   @Override
   public void stop() {
-    //TODO: Do whatever is required to stop your task.
-    log.debug("Set running state to false.");
+    if (log.isDebugEnabled()) log.debug("Set running state to false.");
     running.set(false);
 
-    for(String channel: this.channels){
-      log.debug("Leaving channel: " + channel);
-      this.connection.doPart(channel);
+    if(connection.isConnected()) {
+      for (String channel : this.channels) {
+        if (log.isDebugEnabled()) log.debug("Leaving channel: " + channel);
+        this.connection.doPart(channel);
+      }
+      if (log.isDebugEnabled()) log.debug("Shutting down IRC connection to server...");
+      this.connection.interrupt();
+      if (log.isDebugEnabled()) log.debug("IRC server disconnect complete.");
     }
-    log.debug("Shutting down IRC connection to server...");
-    this.connection.interrupt();
-    log.debug("IRC server disconnect complete.");
 
     try {
       this.connection.join();
@@ -155,6 +144,30 @@ public class IrcSourceTask extends SourceTask {
     }
 
     this.queue.clear();
+
+  }
+
+//
+  private void connectAndJoin() throws ConnectException {
+    if(connection.isConnected()) {
+      if(log.isInfoEnabled()) log.info("Already connected!");
+    }
+    if(log.isInfoEnabled()) log.info("Connecting to server: {}", config.getIrcServer());
+    try {
+      connection.connect();
+    } catch (IOException e) {
+      throw new ConnectException("Unable to connect to server: " + this.ircServer);
+    }
+
+    for (String channel : config.getIrcChannels()) {
+      if(log.isInfoEnabled()) log.info("Joining channel: {}", channel);
+      try {
+        connection.doJoin(channel);
+      } catch (Exception e) {
+        throw new ConnectException("Problem joining channel " + channel);
+      }
+
+    }
 
   }
 
