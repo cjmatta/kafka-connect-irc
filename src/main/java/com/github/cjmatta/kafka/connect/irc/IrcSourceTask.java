@@ -151,6 +151,7 @@ public class IrcSourceTask extends SourceTask {
   private void connectAndJoin() throws ConnectException {
     if(connection.isConnected()) {
       if(log.isInfoEnabled()) log.info("Already connected!");
+      return;
     }
     if(log.isInfoEnabled()) log.info("Connecting to server: {}", config.getIrcServer());
     try {
