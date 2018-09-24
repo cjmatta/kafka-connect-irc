@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Joiner;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.connect.connector.Task;
@@ -64,7 +63,7 @@ public class IrcSourceConnector extends SourceConnector {
     List<Map<String, String>> taskConfigs = new ArrayList<>();
     for(List<String> taskChannels: channelsGrouped) {
       Map<String, String> taskProps = new HashMap<>(originalProps);
-      taskProps.put(IrcSourceTaskConfig.IRC_CHANNELS_CONF, Joiner.on(",").join(taskChannels));
+      taskProps.put(IrcSourceTaskConfig.IRC_CHANNELS_CONF, String.join(",", taskChannels));
       taskConfigs.add(taskProps);
     }
     return taskConfigs;

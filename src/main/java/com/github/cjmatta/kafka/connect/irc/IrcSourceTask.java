@@ -15,7 +15,6 @@
  */
 package com.github.cjmatta.kafka.connect.irc;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.common.config.types.Password;
 import org.apache.kafka.connect.data.Schema;
@@ -28,7 +27,6 @@ import org.schwering.irc.lib.IRCUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.transform.Source;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
@@ -172,8 +170,8 @@ public class IrcSourceTask extends SourceTask {
           ircUser,
           message);
 // Since "resuming" isn't really a thing you can do with IRC these are simply empty maps.
-      Map<String, ?> srcOffset = ImmutableMap.of();
-      Map<String, ?> srcPartition = ImmutableMap.of();
+      Map<String, ?> srcOffset = Collections.emptyMap();
+      Map<String, ?> srcPartition = Collections.emptyMap();
 
       SourceRecord record = new SourceRecord(
           srcPartition,

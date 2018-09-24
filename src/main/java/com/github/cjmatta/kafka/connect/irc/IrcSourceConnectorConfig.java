@@ -16,15 +16,12 @@
 package com.github.cjmatta.kafka.connect.irc;
 
 import com.github.cjmatta.kafka.connect.irc.util.KafkaBotNameGenerator;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigDef.Type;
 import org.apache.kafka.common.config.ConfigDef.Importance;
 import org.apache.kafka.common.config.types.Password;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
