@@ -86,7 +86,7 @@ public class IrcSourceTask extends SourceTask {
       try {
         this.connection.connect();
       } catch (IOException e) {
-        throw new ConnectException("Unable to connect to server: " + this.ircServer);
+        throw new ConnectException("Unable to connect to server: " + this.ircServer + " - error: " + e);
       }
 
       for (String channel : config.getIrcChannels()) {
@@ -96,7 +96,7 @@ public class IrcSourceTask extends SourceTask {
         try {
           this.connection.doJoin(channel);
         } catch (Exception e) {
-          throw new ConnectException("Problem joining channel " + channel);
+          throw new ConnectException("Problem joining channel " + channel + " - error: " + e);
         }
 
       }

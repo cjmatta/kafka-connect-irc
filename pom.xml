@@ -21,7 +21,7 @@
 
     <groupId>io.confluent.kafka.connect</groupId>
     <artifactId>kafka-connect-irc</artifactId>
-    <version>5.0.0</version>
+    <version>5.0.1</version>
     <packaging>jar</packaging>
 
 
@@ -178,7 +178,7 @@
 
                                 <confluentControlCenterIntegration>true</confluentControlCenterIntegration>
 
-                                <singleMessageTransforms>false</singleMessageTransforms>
+                                <singleMessageTransforms>true</singleMessageTransforms>
                             </configuration>
                     </execution>
                 </executions>
