@@ -21,7 +21,7 @@
 
     <groupId>io.confluent.kafka.connect</groupId>
     <artifactId>kafka-connect-irc</artifactId>
-    <version>5.0.1</version>
+    <version>5.1.1</version>
     <packaging>jar</packaging>
 
 
@@ -29,7 +29,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.12</junit.version>
         <avro.version>1.8.2</avro.version>
-        <kafkaconnect.version>2.0.0</kafkaconnect.version>
+        <kafkaconnect.version>2.1.1</kafkaconnect.version>
     </properties>
 
     <name>kafka-connect-irc</name>
@@ -80,31 +80,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
-                    <properties>
-                        <owner>Chris Matta</owner>
-                        <email>cmatta@gmail.com</email>
-                    </properties>
-                    <excludes>
-                        <exclude>**/README**</exclude>
-                        <exclude>src/test/resources/**</exclude>
-                        <exclude>src/main/resources/**</exclude>
-                        <exclude>src/assembly/**</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
